@@ -6,7 +6,7 @@ const Container = styled.div<{
   position: fixed;
   right: 0;
   top: 20px;
-  background: ${({ type }) =>
+  backgrounds: ${({ type }) =>
     type === "SUCCESS"
       ? "#2ecc71"
       : type === "INFO"
@@ -16,12 +16,17 @@ const Container = styled.div<{
       : type === "ERROR"
       ? "#e74c3c"
       : "#3498db"};
-  color: white;
+  background-color: white;
+  color: black;
   font-weight: bold;
-  padding: 0.5rem;
-  min-width: 500px;
-  text-align: center;
+  margin-left: 8px;
+  min-width: 400px;
+  min-height: 50px;
   border-radius: 1px;
+  padding-left: 8px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
 export { Container };
