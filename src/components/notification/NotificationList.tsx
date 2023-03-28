@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 // import useNotification from "../components/hooks/useNotification";
-import { ToastContext } from "../components/notification/Notification";
+import { ToastContext } from "./Notification";
 
 function NotificationList() {
   // const { handleNotification, showNotification }: any = useNotification();
