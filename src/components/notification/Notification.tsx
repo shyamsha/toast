@@ -1,35 +1,55 @@
-import React, { createContext, ReactNode, useEffect, useState } from "react";
-import { Container } from "./style";
+import { useMemo, useState, useRef, useEffect } from "react";
 
-interface ChildrenProps {
-  children: ReactNode;
-}
+import { removeNotification } from "./state/actions";
+import { computeNotificationConfigBasedOnType } from "./types";
 
-interface ToastSchema {
-  type: "INFO" | "WARNING" | "SUCCESS" | "ERROR";
-  message: string;
-}
+const Notification = ({ message, type, id, dispatch }: any) => {
+  const [exit, setExit] = useState(false);
+  const [width, setWidth] = useState(0);
+  const timerRef = useRef();
+  const { classes } = useMemo(
+    () => computeNotificationConfigBasedOnType(type),
+    [type]
+  );
 
-const ToastContext = createContext<
-  React.Dispatch<React.SetStateAction<ToastSchema | undefined>>
->(() => {});
+  const handleStartTimer = () => {
+    (timerRef.current as any) = setInterval(() => {
+      setWidth((previousWidth) => {
+        if (previousWidth < 100) {
+          return previousWidth + 0.5;
+        }
 
-const ToastProvider: React.FC<ChildrenProps> = ({ children }) => {
-  const [toast, setToast] = useState<ToastSchema | undefined>();
+        handleCloseNotification();
+        return previousWidth;
+      });
+    }, 20);
+  };
+
+  const handleCloseNotification = () => {
+    setExit(true);
+    handlePauseTimer();
+
+    setTimeout(() => dispatch(removeNotification(id)), 500);
+  };
+
+  const handlePauseTimer = () => {
+    clearInterval(timerRef.current);
+  };
+
   useEffect(() => {
-    if (toast) {
-      const timeoutId = setTimeout(() => setToast(undefined), 2000);
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }
-  }, [toast]);
+    handleStartTimer();
+  });
+
   return (
-    <ToastContext.Provider value={setToast}>
-      {children}
-      {toast && <Container type={toast.type}>{toast.message}</Container>}
-    </ToastContext.Provider>
+    <div
+      onMouseEnter={handlePauseTimer}
+      onMouseLeave={handleStartTimer}
+      className={`notification-item ${exit ? "exit" : ""} ${classes}`}
+    >
+      <p>{message}</p>
+      <div className="progress-bar" style={{ width: `${width}%` }} />
+    </div>
   );
 };
 
-export { ToastProvider, ToastContext };
+export default Notification;

@@ -1,13 +1,13 @@
 import React from "react";
-import { ToastProvider } from "./components/notification/Notification";
-import NotificationList from "./components/notification/NotificationList";
+import NotificationList from "./components/Notification/NotificationList";
 import "./App.css";
+import { NotificationProvider } from "./components/Notification/NotificationProvider";
 
 function App() {
   return (
-    <ToastProvider>
+    <NotificationProvider>
       <NotificationList />
-    </ToastProvider>
+    </NotificationProvider>
   );
 }
 

@@ -1,22 +1,15 @@
-import React, { useContext } from "react";
-// import useNotification from "../components/hooks/useNotification";
-import { ToastContext } from "./Notification";
+import React from "react";
+import { useNotifications } from "./NotificationProvider";
 
 function NotificationList() {
-  // const { handleNotification, showNotification }: any = useNotification();
-  const setToast = useContext(ToastContext);
+  const { showNotification }: any = useNotifications();
   const handleClick = (e: { target: any }) => {
     const { target } = e;
     const type = target.getAttribute("data-type");
     const message = `${type} Notification`;
-    // handleNotification(type, message);
-    // showNotification({
-    //   type,
-    //   message: message,
-    // });
-    setToast({
-      type: type,
-      message: message,
+    showNotification({
+      type,
+      message,
     });
   };
 
